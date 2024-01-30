@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User Project Suggestion</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
+    </head>
+    <body class="bg-slate-950 text-white p-4">
+        <main class="max-w-3xl w-full mx-auto my-12">
+            <h1 class="text-3xl font-semibold mb-4">Project Suggestion</h1>
+            <p class="leading-6 text-lg">
+                Suggest a project we should be working on during Live Streaming.
+            </p>
+            <form id="form" class="flex flex-col gap-4 my-6" action="#">
+                <textarea
+                    class="bg-slate-800 shadow-xl w-full h-20 p-4 rounded"
+                    name="item"
+                    id="item"
+                    placeholder="Enter your suggestion here"
+                ></textarea>
+                <button
+                    class="bg-purple-900 px-6 py-2 rounded shadow ml-auto transition hover:bg-white hover:text-purple-900"
+                    type="submit"
+                >
+                    Send
+                </button>
+            </form>
+
+            <ul id="suggestions" class="space-y-4"></ul>
+        </main>
+
+        <script src="index.js"></script>
+    </body>
+</html>
