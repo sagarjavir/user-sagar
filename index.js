@@ -1,8 +1,3 @@
-// TODO:
-// - figure out how to attach a user to a document
-// - figure out how to only allow logged in user to create a document
-// - change urls from localhost to vercel
-
 const suggestionsEl = document.getElementById("suggestions");
 const formEl = document.getElementById("form");
 const loginBtn = document.getElementById("login");
@@ -52,9 +47,8 @@ form.addEventListener("submit", async (e) => {
 loginBtn.addEventListener("click", () => {
     account.createOAuth2Session(
         "github",
-        "http://localhost:5500",
-        "http://localhost:5500",
-        ["account"]
+        "https://user-suggestions.vercel.app/",
+        "https://user-suggestions.vercel.app/"
     );
 });
 
