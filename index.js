@@ -95,16 +95,14 @@ async function getSuggestions() {
     res.documents.reverse().forEach((doc) => {
         const suggestionEl = document.createElement("li");
 
-        console.log(doc, session);
-
         suggestionEl.className =
             "flex items-center border border-white/20 p-4 rounded shadow";
 
         suggestionEl.innerHTML = `<strong>${doc.owner_name}</strong>: ${doc.text}`;
 
         if (
-            doc.$permissions.includes(`delete("user:${session.$id}")`) ||
-            session.labels.includes("admin")
+            doc.$permissions.includes(`delete("user:${session?.$id}")`) ||
+            session?.labels.includes("admin")
         ) {
             const deleteBtn = document.createElement("button");
 
