@@ -26,33 +26,21 @@ const account = new Account(client);
 let session = undefined;
 
 getUser();
+getSuggestions();
 
-let promise = databases.listDocuments(DB_ID, COLLECTION_ID);
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-promise.then(
-    (res) => {
-        res.documents.reverse().forEach((doc) => {
-            const suggestionEl = document.createElement("li");
-
-            suggestionEl.className =
-                "border border-white/20 p-4 rounded shadow";
-
-            suggestionEl.innerText = doc.text;
-
-            suggestionsEl.appendChild(suggestionEl);
-        });
-    },
-    (err) => console.log(err)
-);
-
-form.addEventListener("submit", (e) => {
-    if (itemTextarea.value !== "") {
-        databases.createDocument(DB_ID, COLLECTION_ID, ID.unique(), {
+    if (itemTextarea.value !== "" && session) {
+        await databases.createDocument(DB_ID, COLLECTION_ID, ID.unique(), {
             text: itemTextarea.value,
+            owner_name: session.name,
         });
 
         itemTextarea.value = "";
     }
+
+    getSuggestions();
 });
 
 loginBtn.addEventListener("click", () => {
@@ -71,8 +59,11 @@ logoutBtn.addEventListener("click", async () => {
 });
 
 async function getUser() {
-    session = await account.get("current");
-
+    try {
+        session = await account.get("current");
+    } catch (e) {
+        console.log(e);
+    }
     if (session) {
         loginBtn.classList.add("hidden");
         userEl.classList.remove("hidden");
@@ -82,4 +73,20 @@ async function getUser() {
         loginBtn.classList.remove("hidden");
         userEl.classList.add("hidden");
     }
+}
+
+async function getSuggestions() {
+    suggestionsEl.innerHTML = "";
+
+    const res = await databases.listDocuments(DB_ID, COLLECTION_ID);
+
+    res.documents.reverse().forEach((doc) => {
+        const suggestionEl = document.createElement("li");
+
+        suggestionEl.className = "border border-white/20 p-4 rounded shadow";
+
+        suggestionEl.innerHTML = `<strong>${doc.owner_name}</strong>: ${doc.text}`;
+
+        suggestionsEl.appendChild(suggestionEl);
+    });
 }
