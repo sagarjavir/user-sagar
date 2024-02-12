@@ -33,6 +33,14 @@ function App() {
         getSuggestions();
     }
 
+    async function updateDocument(id, completed) {
+        await databases.updateDocument(DB_ID, COLLECTION_ID, id, {
+            completed: completed,
+        });
+
+        getSuggestions();
+    }
+
     async function addSuggestion(e) {
         e.preventDefault();
 
@@ -165,8 +173,9 @@ function App() {
                     {suggestions.map((suggestion) => (
                         <li
                             key={suggestion.$id}
-                            className="flex items-center border border-white/20 p-4 rounded shadow"
+                            className="flex items-center border border-white/20 p-4 rounded shadow gap-2"
                         >
+                            <span>{suggestion.completed ? "✅" : null}</span>
                             <p>
                                 <strong>
                                     {suggestion.owner_name
@@ -175,11 +184,24 @@ function App() {
                                 </strong>
                                 : {suggestion.text}
                             </p>
+                            {session?.labels.includes("admin") ? (
+                                <input
+                                    className="ml-auto"
+                                    type="checkbox"
+                                    checked={suggestion.completed}
+                                    onChange={() =>
+                                        updateDocument(
+                                            suggestion.$id,
+                                            !suggestion.completed
+                                        )
+                                    }
+                                />
+                            ) : null}
                             {suggestion.$permissions.includes(
                                 `delete("user:${session?.$id}")`
                             ) || session?.labels.includes("admin") ? (
                                 <button
-                                    className="text-red-500 ml-auto hover:text-red-800"
+                                    className="text-red-500 hover:text-red-800"
                                     onClick={() =>
                                         deleteDocument(suggestion.$id)
                                     }
