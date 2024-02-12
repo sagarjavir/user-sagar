@@ -176,9 +176,8 @@ function App() {
                                 : {suggestion.text}
                             </p>
                             {suggestion.$permissions.includes(
-                                `delete("user:${session?.$id}")` ||
-                                    session?.labels.includes("admin")
-                            ) ? (
+                                `delete("user:${session?.$id}")`
+                            ) || session?.labels.includes("admin") ? (
                                 <button
                                     className="text-red-500 ml-auto hover:text-red-800"
                                     onClick={() =>
